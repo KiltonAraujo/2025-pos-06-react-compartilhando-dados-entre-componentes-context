@@ -1,11 +1,11 @@
 "use client";
 
-import type React from "react";
+import React, { useEffect, useState } from "react";
 import axios from 'axios';
-import { useEffect, useState } from "react";
 import { TarefaInterface } from "@/types/tarefa";
 import { useTarefas } from "@/data/ContextTarefa";
 import Navbar from "@/componentes/Navbar";
+import { carregar } from "@/data/index.ts"; 
 
 
 interface TarefaProps {
@@ -65,18 +65,18 @@ const Home = () => {
   const [mostrarModal, setMostrarModal] = useState(false);
 
   useEffect(() => {
-    axios.get('https://dummyjson.com/todos')
-      .then(response => {
-        const tarefasAdaptadas: TarefaInterface[] = response.data.todos.map((tarefa: any) => ({
-          id: tarefa.id,
-          title: tarefa.todo,
-          completed: tarefa.completed,
-        }));
-        setTarefas(tarefasAdaptadas);
-      })
-      .catch(error => {
-        console.error('Erro ao buscar tarefas:', error);
-      });
+    async function carregarTarefas() {
+      const tarefasLocais = await carregar();
+      const resposta = await axios.get('https://dummyjson.com/todos');
+      const tarefasAPI: TarefaInterface[] = resposta.data.todos.map((tarefa: any) => ({
+        id: tarefa.id,
+        title: tarefa.todo,
+        completed: tarefa.completed,
+      }));
+      setTarefas([...arefasLocais, ...tarefasAPI]);
+    }
+
+    carregarTarefas();
   }, [setTarefas]);
 
   const adicionarNovaTarefa = (novaTarefa: string) => {

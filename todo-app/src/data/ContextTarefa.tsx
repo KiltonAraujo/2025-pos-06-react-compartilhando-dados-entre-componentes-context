@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { TarefaInterface } from "@/types/tarefa";
 
 interface TarefasContextType {
@@ -18,6 +18,20 @@ export const useTarefas = () => {
 
 export const TarefasProvider = ({ children }: { children: ReactNode }) => {
   const [tarefas, setTarefas] = useState<TarefaInterface[]>([]);
+
+  // Carregar do localStorage ao iniciar
+  useEffect(() => {
+    const tarefasSalvas = localStorage.getItem("tarefas");
+    if (tarefasSalvas) {
+      setTarefas(JSON.parse(tarefasSalvas));
+    }
+  }, []);
+
+  // Salvar no localStorage sempre que mudar
+  useEffect(() => {
+    localStorage.setItem("tarefas", JSON.stringify(tarefas));
+  }, [tarefas]);
+
   return (
     <TarefasContext.Provider value={{ tarefas, setTarefas }}>
       {children}

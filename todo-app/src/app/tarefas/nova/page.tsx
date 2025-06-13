@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTarefas } from "@/data/ContextTarefa";
+import { adicionar } from "@/data/index";
 import Navbar from "@/componentes/Navbar";
 
 export default function NovaTarefaPage() {
@@ -10,16 +11,12 @@ export default function NovaTarefaPage() {
   const { tarefas, setTarefas } = useTarefas();
   const router = useRouter();
 
-  const adicionarTarefa = () => {
+  const adicionarTarefa = async () => {
     if (novaTarefa.trim() !== "") {
-      setTarefas([
-        ...tarefas,
-        {
-          id: tarefas.length + 1,
-          title: novaTarefa,
-          completed: false,
-        },
-      ]);
+      await adicionar({
+        title: novaTarefa,
+        completed: false,
+      });
       setNovaTarefa("");
       router.push("/tarefas");
     }
