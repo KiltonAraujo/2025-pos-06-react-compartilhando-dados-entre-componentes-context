@@ -1,9 +1,5 @@
-export type TarefaInterface = {
-	id: number;
-	title: string;
-	completed: boolean;
-};
 
+<<<<<<< HEAD
 const dados: Array<TarefaInterface> = [
 	{ id: 1, title: "delectus aut autem", completed: false },
 	{
@@ -42,3 +38,5 @@ const adicionar = (novaTarefa: TarefaInterface) => {
 export { carregar, adicionar };
 
 export default dados;
+=======
+>>>>>>> 970fcdc202a142a562870a39a1f203d323812aba
